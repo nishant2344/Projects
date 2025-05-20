@@ -1,0 +1,933 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Paatshala - Educational Platform</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* Reset and Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        body {
+            background-color: #F9FAFB;
+            color: #1F2937;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* Dark Mode Styles */
+        body.dark-mode {
+            background-color: #1F2937;
+            color: #F9FAFB;
+        }
+
+        .dark-mode .card,
+        .dark-mode header,
+        .dark-mode .auth-card,
+        .dark-mode .dashboard-header,
+        .dark-mode .course-card,
+        .dark-mode .social-btn {
+            background-color: #374151;
+            color: #F9FAFB;
+        }
+
+        .dark-mode .nav-links a,
+        .dark-mode .feature-card p,
+        .dark-mode .testimonial-content p.role,
+        .dark-mode .testimonial-content p.quote,
+        .dark-mode .auth-card p,
+        .dark-mode .progress-info {
+            color: #D1D5DB;
+        }
+
+        .dark-mode .form-group input {
+            background-color: #4B5563;
+            border-color: #6B7280;
+            color: #F9FAFB;
+        }
+
+        .dark-mode .btn-outline {
+            border-color: #3B82F6;
+            color: #3B82F6;
+        }
+
+        .dark-mode .social-btn {
+            border-color: #6B7280;
+        }
+
+        /* Fix for form text in dark mode */
+        .dark-mode .auth-card h2,
+        .dark-mode .auth-card p,
+        .dark-mode .form-group label {
+            color: #F9FAFB !important;
+        }
+
+        /* Theme Toggle Button */
+        .theme-toggle {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: #3B82F6;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+            border: none;
+            outline: none;
+        }
+
+        .theme-toggle i {
+            font-size: 1.2rem;
+        }
+
+        /* Utility Classes */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-weight: 500;
+            cursor: pointer;
+            text-decoration: none;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: linear-gradient(to right, #3B82F6, #1D4ED8);
+            color: white;
+            border: none;
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: #3B82F6;
+            border: 1px solid #3B82F6;
+        }
+
+        .card {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            height: 100%;
+            transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        /* Header Styles */
+        header {
+            background-color: white;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #1F2937;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+        }
+
+        .nav-links a {
+            color: #4B5563;
+            text-decoration: none;
+            font-size: 1rem;
+        }
+
+        .auth-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 80px 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-content {
+            max-width: 600px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .hero h1 span {
+            color: #3B82F6;
+            display: block;
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            color: #6B7280;
+            margin-bottom: 30px;
+        }
+
+        .hero-shapes {
+            position: absolute;
+            top: 0;
+            right: 0;
+            z-index: 1;
+        }
+
+        .circle-1 {
+            width: 200px;
+            height: 200px;
+            background-color: #DBEAFE;
+            border-radius: 50%;
+            opacity: 0.5;
+            position: absolute;
+            right: 100px;
+            top: 50px;
+        }
+
+        .circle-2 {
+            width: 100px;
+            height: 100px;
+            background-color: #93C5FD;
+            border-radius: 50%;
+            opacity: 0.7;
+            position: absolute;
+            right: 200px;
+            top: 150px;
+        }
+
+        /* Features Section with Animations */
+        .features {
+            padding: 80px 0;
+            position: relative;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+            margin-top: 40px;
+            perspective: 1000px;
+        }
+
+        .feature-card {
+            min-height: 160px;
+            transition: all 0.5s cubic-bezier(0.25, 0.8, 0.25, 1);
+            transform-style: preserve-3d;
+            position: relative;
+            z-index: 1;
+            cursor: pointer;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-20px) scale(1.05);
+            box-shadow: 0 20px 30px rgba(0, 0, 0, 0.15);
+            z-index: 2;
+        }
+
+        /* Specific hover animations for each card */
+        .features-grid:hover .feature-card:not(:hover) {
+            opacity: 0.8;
+            transform: scale(0.95);
+        }
+
+        /* Individual card animations */
+        .feature-card:nth-child(1):hover {
+            transform: translateY(-20px) translateX(10px) scale(1.05);
+        }
+
+        .feature-card:nth-child(2):hover {
+            transform: translateY(-20px) scale(1.05);
+        }
+
+        .feature-card:nth-child(3):hover {
+            transform: translateY(-20px) translateX(-10px) scale(1.05);
+        }
+
+        /* Smooth transition for all elements */
+        .feature-card h3, .feature-card p {
+            transition: all 0.3s ease;
+        }
+
+        .feature-card:hover h3 {
+            color: #3B82F6;
+        }
+
+        .feature-card:hover p {
+            transform: translateY(5px);
+        }
+
+        /* Dark mode adjustments for feature cards */
+        .dark-mode .feature-card:hover h3 {
+            color: #93C5FD;
+        }
+
+        .dark-mode .feature-card:hover {
+            box-shadow: 0 20px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Testimonials Section */
+        .testimonials {
+            padding: 80px 0;
+        }
+
+        .testimonials h2 {
+            margin-bottom: 30px;
+        }
+
+        .testimonial-card {
+            display: flex;
+            padding: 30px;
+        }
+
+        .testimonial-avatar {
+            width: 60px;
+            height: 60px;
+            background-color: #DBEAFE;
+            border-radius: 50%;
+            margin-right: 20px;
+            flex-shrink: 0;
+        }
+
+        .testimonial-content h3 {
+            margin-bottom: 5px;
+        }
+
+        .testimonial-content p.role {
+            color: #6B7280;
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+        }
+
+        .testimonial-content p.quote {
+            color: #4B5563;
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        /* Auth Forms */
+        .auth-section {
+            display: none;
+            padding: 50px 0;
+        }
+
+        .auth-container {
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        .auth-card {
+            padding: 40px;
+        }
+
+        .auth-card h2 {
+            margin-bottom: 10px;
+            color: #1F2937;
+        }
+
+        .auth-card p {
+            color: #6B7280;
+            margin-bottom: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #374151;
+            font-size: 0.9rem;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #E5E7EB;
+            border-radius: 6px;
+            background-color: #F9FAFB;
+            font-size: 1rem;
+        }
+
+        .submit-btn {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            margin: 30px 0;
+            border-radius: 6px;
+        }
+
+        .social-login {
+            text-align: center;
+        }
+
+        .social-login p {
+            margin: 20px 0;
+            position: relative;
+        }
+
+        .social-buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .social-btn {
+            padding: 12px;
+            border: 1px solid #E5E7EB;
+            border-radius: 6px;
+            background-color: white;
+            cursor: pointer;
+        }
+
+        /* Dashboard */
+        .dashboard {
+            display: none;
+            padding: 20px 0;
+        }
+
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: white;
+            padding: 15px 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            background-color: #DBEAFE;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+
+        .welcome-card {
+            background: linear-gradient(to right, #3B82F6, #1D4ED8);
+            color: white;
+            border-radius: 8px;
+            padding: 30px;
+            margin-bottom: 40px;
+        }
+
+        .welcome-card h2 {
+            margin-bottom: 10px;
+        }
+
+        .progress-section h2 {
+            margin-bottom: 20px;
+        }
+
+        .course-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 30px;
+        }
+
+        .course-card {
+            padding: 20px;
+        }
+
+        .course-card h3 {
+            margin-bottom: 15px;
+        }
+
+        .progress-info {
+            margin-bottom: 10px;
+            color: #6B7280;
+        }
+
+        .progress-bar {
+            height: 8px;
+            background-color: #E5E7EB;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background-color: #3B82F6;
+            border-radius: 4px;
+        }
+
+        /* Footer Styles */
+        footer {
+            background: #ffffff;
+            color: #1F2937;
+            padding: 40px 0 20px;
+            margin-top: auto;
+        }
+
+        .dark-mode footer {
+            background: #111827;
+            color: #F9FAFB;
+        }
+
+        .footer-container {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .footer-section {
+            flex: 1;
+            min-width: 200px;
+            margin: 10px 20px;
+        }
+
+        .footer-section h2,
+        .footer-section h3 {
+            color: #3B82F6;
+            margin-bottom: 15px;
+        }
+
+        .footer-section h3 {
+            border-bottom: 2px solid #3B82F6;
+            padding-bottom: 5px;
+            display: inline-block;
+        }
+
+        .footer-section p {
+            margin: 8px 0;
+            color: #4B5563;
+        }
+
+        .dark-mode .footer-section p {
+            color: #4B5563;
+        }
+
+        .footer-section ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .footer-section ul li {
+            margin: 8px 0;
+        }
+
+        .footer-section a {
+            color: #3B82F6;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-section a:hover {
+            color: #1D4ED8;
+            text-decoration: underline;
+        }
+
+        .footer-section.social {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .social-icons {
+            display: flex;
+            gap: 15px;
+            margin-top: 10px;
+        }
+
+        .social-icons a {
+            color: #3B82F6;
+            font-size: 1.5rem;
+            transition: transform 0.3s ease, color 0.3s ease;
+        }
+
+        .social-icons a:hover {
+            color: #1D4ED8;
+            transform: translateY(-3px);
+        }
+
+        .copyright {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #E5E7EB;
+            color: #6B7280;
+            font-size: 0.9rem;
+        }
+
+        .dark-mode .copyright {
+            border-top: 1px solid #374151;
+            color: #9ca3af;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .course-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            /* Adjust animations for mobile */
+            .feature-card:hover {
+                transform: translateY(-10px) scale(1.03);
+            }
+            
+            .feature-card:nth-child(1):hover,
+            .feature-card:nth-child(3):hover {
+                transform: translateY(-10px) scale(1.03);
+            }
+            
+            .features-grid:hover .feature-card:not(:hover) {
+                opacity: 1;
+                transform: scale(1);
+            }
+
+            .footer-section {
+                min-width: 100%;
+                margin: 15px 0;
+                text-align: center;
+            }
+
+            .footer-section h3 {
+                display: block;
+            }
+
+            .social-icons {
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Theme Toggle Button -->
+    <button class="theme-toggle" id="themeToggle">
+        <i class="fas fa-moon"></i>
+    </button>
+
+    <!-- Homepage -->
+    <div id="homepage">
+        <header>
+            <div class="container">
+                <nav>
+                    <div class="logo">Paatshala</div>
+                    <div class="nav-links">
+                        <a href="courses.html">Courses</a>
+                        <a href="about.html">About</a>
+                        <a href="materials.html">Materials</a>
+                    </div>
+                    <div class="auth-buttons">
+                        <a href="#" class="btn btn-outline login-btn">Log In</a>
+                        <a href="#" class="btn btn-primary signup-btn">Sign Up</a>
+                    </div>
+                </nav>
+            </div>
+        </header>
+
+        <section class="hero">
+            <div class="container">
+                <div class="hero-content">
+                    <h1>Welcome to <span>Paatshala</span></h1>
+                    <p>Transform your learning journey with us</p>
+                </div>
+                <div class="hero-shapes">
+                    <div class="circle-1"></div>
+                    <div class="circle-2"></div>
+                </div>
+            </div>
+        </section>
+
+        <section class="features">
+            <div class="container">
+                <div class="features-grid">
+                    <div class="card feature-card">
+                        <h3>Expert Courses</h3>
+                        <p>Learn from industry professionals</p>
+                    </div>
+                    <div class="card feature-card">
+                        <h3>Live Webinars</h3>
+                        <p>Interactive learning sessions</p>
+                    </div>
+                    <div class="card feature-card">
+                        <h3>Study Materials</h3>
+                        <p>Comprehensive resources</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="testimonials">
+            <div class="container">
+                <h2>Student Testimonials</h2>
+                <div class="card testimonial-card">
+                    <div class="testimonial-avatar"></div>
+                    <div class="testimonial-content">
+                        <h3>Sarah Parker</h3>
+                        <p class="role">Web Development Student</p>
+                        <p class="quote">"The platform has transformed my learning experience. The courses are well-structured and the instructors are incredibly helpful."</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Login Page -->
+    <section id="login-page" class="auth-section">
+        <div class="container">
+            <div class="auth-container">
+                <div class="card auth-card">
+                    <h2>Welcome Back</h2>
+                    <p>Sign in to continue learning</p>
+                    
+                    <form id="login-form">
+                        <div class="form-group">
+                            <label for="login-email">Email</label>
+                            <input type="email" id="login-email" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="login-password">Password</label>
+                            <input type="password" id="login-password" required>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary submit-btn">Sign In</button>
+                    </form>
+                    
+                    <div class="social-login">
+                        <p>Or continue with</p>
+                        <div class="social-buttons">
+                            <button class="social-btn">Google</button>
+                            <button class="social-btn">GitHub</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sign Up Page -->
+    <section id="signup-page" class="auth-section">
+        <div class="container">
+            <div class="auth-container">
+                <div class="card auth-card">
+                    <h2>Create Account</h2>
+                    <p>Join our learning community</p>
+                    
+                    <form id="signup-form">
+                        <div class="form-group">
+                            <label for="signup-name">Full Name</label>
+                            <input type="text" id="signup-name" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="signup-email">Email</label>
+                            <input type="email" id="signup-email" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="signup-password">Password</label>
+                            <input type="password" id="signup-password" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="signup-confirm">Confirm Password</label>
+                            <input type="password" id="signup-confirm" required>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary submit-btn">Create Account</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Dashboard -->
+    <section id="dashboard" class="dashboard">
+        <div class="container">
+            <div class="dashboard-header">
+                <div class="logo">Paatshala</div>
+                <div class="user-profile">
+                    <div class="user-avatar"></div>
+                    <span>Salman Khan</span>
+                </div>
+            </div>
+            
+            <div class="welcome-card">
+                <h2>Welcome back, Salman!</h2>
+                <p>Continue your learning journey</p>
+            </div>
+            
+            <div class="progress-section">
+                <h2>Your Progress</h2>
+                <div class="course-grid">
+                    <div class="card course-card">
+                        <h3>Web Development</h3>
+                        <p class="progress-info">Progress: 65%</p>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 65%"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="card course-card">
+                        <h3>Data Science</h3>
+                        <p class="progress-info">Progress: 40%</p>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 40%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-container">
+            <div class="footer-section about">
+                <h2>Paatshala</h2>
+                <p>Empowering students with knowledge and skills for a brighter future.</p>
+                <p>&copy; 2024 Paatshala. All Rights Reserved.</p>
+            </div>
+            
+            <div class="footer-section links">
+                <h3>Quick Links</h3>
+                <ul>
+                    <li><a href="courses.html">Courses</a></li>
+                    <li><a href="about.html">About</a></li>
+                    <li><a href="materials.html">Materials</a></li>
+                    <li><a href="contact.html">Contact Us</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-section contact">
+                <h3>Contact Us</h3>
+                <p>📍 69, UNA, Himachal Pradesh, India</p>
+                <p>📞 +91 9192002919</p>
+                <p>✉️ info@Paatshala.com</p>
+            </div>
+            
+            <div class="footer-section social">
+                <h3>Follow Us</h3>
+                <div class="social-icons">
+                    <a href="#" title="Twitter"><i class="fab fa-twitter"></i></a>
+                    <a href="#" title="Instagram"><i class="fab fa-instagram"></i></a>
+                    <a href="#" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="copyright">
+            <p> ❤️ </p>
+        </div>
+    </footer>
+
+    <script>
+        const themeToggle = document.getElementById('themeToggle');
+        const body = document.body;
+
+        const savedTheme = localStorage.getItem('theme') ||
+            (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+
+        if (savedTheme === 'dark') {
+            body.classList.add('dark-mode');
+            themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+        }
+
+        themeToggle.addEventListener('click', () => {
+            body.classList.toggle('dark-mode');
+
+            if (body.classList.contains('dark-mode')) {
+                localStorage.setItem('theme', 'dark');
+                themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+            } else {
+                localStorage.setItem('theme', 'light');
+                themeToggle.innerHTML = '<i class="fas fa-moon"></i>';
+            }
+        });
+
+        const homepage = document.getElementById('homepage');
+        const loginPage = document.getElementById('login-page');
+        const signupPage = document.getElementById('signup-page');
+        const dashboard = document.getElementById('dashboard');
+
+        const loginBtn = document.querySelector('.login-btn');
+        const signupBtn = document.querySelector('.signup-btn');
+        const loginForm = document.getElementById('login-form');
+        const signupForm = document.getElementById('signup-form');
+
+        loginBtn.addEventListener('click', function (e) {
+            e.preventDefault();
+            homepage.style.display = 'none';
+            loginPage.style.display = 'block';
+            signupPage.style.display = 'none';
+            dashboard.style.display = 'none';
+        });
+
+        signupBtn.addEventListener('click', function (e) {
+            e.preventDefault();
+            homepage.style.display = 'none';
+            loginPage.style.display = 'none';
+            signupPage.style.display = 'block';
+            dashboard.style.display = 'none';
+        });
+
+        loginForm.addEventListener('submit', function (e) {
+            e.preventDefault();
+            homepage.style.display = 'none';
+            loginPage.style.display = 'none';
+            signupPage.style.display = 'none';
+            dashboard.style.display = 'block';
+        });
+
+        signupForm.addEventListener('submit', function (e) {
+            e.preventDefault();
+            homepage.style.display = 'none';
+            loginPage.style.display = 'none';
+            signupPage.style.display = 'none';
+            dashboard.style.display = 'block';
+        });
+    </script>
+</body>
+</html>
