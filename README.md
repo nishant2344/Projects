@@ -20,4 +20,7 @@ Practical examples of algorithm design and implementation.
 Clear documentation for understanding the approach and logic behind each project.
 Code is modular and beginner-friendly, making it easy to learn and adapt.
 
+Extra:-
+It also have some extra projects on frontend and backend also.
+
 Feel free to explore the projects, give feedback, or contribute! 😊
