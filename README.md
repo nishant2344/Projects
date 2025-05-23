@@ -22,5 +22,7 @@ Code is modular and beginner-friendly, making it easy to learn and adapt.
 
 Extra:-
 It also have some extra projects on frontend and backend also.
-
+<br>
+Here is the index.html file which contain the codes of a simple normal webpages of <b>Paatshala</b>. The e-learning platform.
+<br> 
 Feel free to explore the projects, give feedback, or contribute! 😊
